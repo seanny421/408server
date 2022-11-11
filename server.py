@@ -3,6 +3,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from youtube_transcript_api import YouTubeTranscriptApi
 import json
 import sys
+import urllib.parse
 
 import time
 
@@ -11,7 +12,9 @@ serverPort = 8080
 
 class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
-        self.write_response(YouTubeTranscriptApi.get_transcript('KHYOq8iSZic'))
+        vidId = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query).get("vidId", None)
+        print(vidId)
+        self.write_response(YouTubeTranscriptApi.get_transcript(vidId[0]))
 
 
     def write_response(self, content):
